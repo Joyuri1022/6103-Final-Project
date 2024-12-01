@@ -1,4 +1,5 @@
 # DATS6103 Final Project 
+# pip install ucimlrepo
 #%%
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -21,6 +22,7 @@ print(cdc_diabetes_health_indicators.metadata)
 # variable information 
 print(cdc_diabetes_health_indicators.variables)
 # %%
+# Check null values
 rows = len(X)
 missing = (X.isnull().sum() / rows * 100).to_frame('percentage of missing values')
 print(missing)
