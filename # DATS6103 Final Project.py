@@ -250,3 +250,17 @@ roc_auc = auc(fpr, tpr)
 # Plot ROC curve
 xgboost_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of XGBoost Model')
 # %%
+
+
+
+
+
+
+# 2nd Smart Question - siddharth
+# Which habit causes more risk in high blood pressure? Consuming alcohol or smoking?
+# Import necessary libraries
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import statsmodels.api as sm
+from sklearn.preprocessing import StandardScaler
