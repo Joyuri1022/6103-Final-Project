@@ -279,3 +279,8 @@ sns.barplot(
     ci=None,
     palette='Set2'
     )
+plt.title("Proportion of High Blood Pressure by Smoking Status")
+plt.ylabel("Proportion of High Blood Pressure")
+plt.xlabel("Smoking Status (0 = Non-Smoker, 1 = Smoker)")
+plt.xticks(ticks=[0, 1], labels=["Non-Smoker", "Smoker"])
+plt.show()
