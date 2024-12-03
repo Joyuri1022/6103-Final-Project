@@ -284,3 +284,5 @@ plt.ylabel("Proportion of High Blood Pressure")
 plt.xlabel("Smoking Status (0 = Non-Smoker, 1 = Smoker)")
 plt.xticks(ticks=[0, 1], labels=["Non-Smoker", "Smoker"])
 plt.show()
+
+# 2. Bar Plot for Heavy Alcohol Consumption and High Blood Pressure
