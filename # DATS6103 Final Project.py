@@ -264,3 +264,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from sklearn.preprocessing import StandardScaler
+
+# Combine features with target variable for easier analysis
+data = X.copy()
+data['HighBP'] = y
+required_columns = ['Smoker', 'HvyAlcoholConsump', 'Age', 'Sex']
