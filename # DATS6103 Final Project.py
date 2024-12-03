@@ -50,6 +50,19 @@ plt.title('Correlation Matrix Heatmap')
 plt.tight_layout()
 plt.show()
 
+# %%
+# Plot ROC curve
+def rocplot(fpr, tpr, roc_auc, name):
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, color='red', lw=2, 
+            label=f'ROC curve (AUC = {roc_auc:.4f})')
+    plt.plot([0, 1], [0, 1], color='black', lw=2, linestyle='dashdot')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(name)
+    plt.legend(loc="lower right")
 
 # %%
 # Logistic Regression model
@@ -145,20 +158,7 @@ y_pred_proba = model_2.predict_proba(X_test_scaled)[:, 1]
 fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
 roc_auc = auc(fpr, tpr)
 
-# Plot ROC Curve
-plt.figure(figsize=(8, 6))
-plt.plot(fpr, tpr, color='red', lw=2, 
-         label=f'ROC curve (AUC = {roc_auc:.2f})')
-plt.plot([0, 1], [0, 1], color='black', lw=2, linestyle='--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Curve of Logistic Regression')
-plt.legend(loc="lower right")
-
-plt.tight_layout()
-plt.show()
+lr_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of Logistic Regression Model')
 
 # Print model performance metrics
 y_pred = model_2.predict(X_test_scaled)
@@ -168,7 +168,6 @@ print(classification_report(y_test, y_pred))
 
 print("\nFeature Importance:")
 print(feature_importance.to_string(index=False))
-
 
 # Create odds ratios
 feature_importance['Odds_Ratio'] = np.exp(feature_importance['Raw_Coefficient'])
@@ -200,15 +199,54 @@ fpr, tpr, thresholds = roc_curve(y_test, y_pred)
 roc_auc = auc(fpr, tpr)
 
 # Plot ROC curve
-plt.figure(figsize=(8, 6))
-plt.plot(fpr, tpr, color='red', lw=2, 
-         label=f'ROC curve (AUC = {roc_auc:.2f})')
-plt.plot([0, 1], [0, 1], color='black', lw=2, linestyle='--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('ROC Curve of Random Forest')
-plt.legend(loc="lower right")
-plt.show()
+rf_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of Random Forest Model')
+
+# %%
+from sklearn.neighbors import KNeighborsClassifier
+# Initialize and train KNN model
+# Using square root of n as rule of thumb for n_neighbors
+n_neighbors = int(np.sqrt(len(X_train)))
+knn = KNeighborsClassifier(n_neighbors=n_neighbors)
+knn.fit(X_train_scaled, y_train)
+
+# Get predictions and probabilities
+y_pred_proba = knn.predict_proba(X_test_scaled)[:, 1]
+
+# Calculate ROC curve and AUC
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+# Plot ROC curve
+knn_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of KNN Model')
+
+# %%
+import xgboost as xgb
+# Initialize and train XGBoost model
+xgb_model = xgb.XGBClassifier(
+    objective='binary:logistic',
+    learning_rate=0.1,
+    max_depth=4,
+    n_estimators=100,
+    random_state=7
+)
+
+# Train the model
+xgb_model.fit(
+    X_train_scaled, 
+    y_train,
+    eval_set=[(X_test_scaled, y_test)],
+    eval_metric='auc',
+    early_stopping_rounds=20,
+    verbose=False
+)
+
+# Get predictions and probabilities
+y_pred_proba = xgb_model.predict_proba(X_test_scaled)[:, 1]
+
+# Calculate ROC curve and AUC
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
+roc_auc = auc(fpr, tpr)
+
+# Plot ROC curve
+xgboost_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of XGBoost Model')
 # %%
