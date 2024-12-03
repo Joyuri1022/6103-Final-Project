@@ -269,3 +269,13 @@ from sklearn.preprocessing import StandardScaler
 data = X.copy()
 data['HighBP'] = y
 required_columns = ['Smoker', 'HvyAlcoholConsump', 'Age', 'Sex']
+# 1. Bar Plot for Smoking and High Blood Pressure
+plt.figure(figsize=(10, 6))
+sns.barplot(
+    x='Smoker',
+    y='HighBP',
+    data=data,
+    estimator=lambda x: sum(x) / len(x),  # Proportion of HighBP
+    ci=None,
+    palette='Set2'
+    )
