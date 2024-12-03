@@ -313,3 +313,8 @@ X_model = sm.add_constant(X_model)
 logit_model = sm.Logit(y_model, X_model).fit()
 
 print(logit_model.summary())
+## Interpretation
+
+## 1. Check the p-values: Variables with p-values < 0.05 are statistically significant.
+## 2. Coefficients indicate the direction of the relationship (positive or negative).
+## 3. Odds ratios can be calculated as exp(coefficients) for easier interpretation.
