@@ -311,3 +311,5 @@ X_model[['Age']] = scaler.fit_transform(X_model[['Age']])
 X_model = sm.add_constant(X_model)
 
 logit_model = sm.Logit(y_model, X_model).fit()
+
+print(logit_model.summary())
