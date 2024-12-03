@@ -301,3 +301,11 @@ plt.ylabel("Proportion of High Blood Pressure")
 plt.xlabel("Heavy Alcohol Consumption (0 = No/Low, 1 = Heavy)")
 plt.xticks(ticks=[0, 1], labels=["No/Low", "Heavy"])
 plt.show()
+
+# 3. Logistic Regression
+predictors = ['Smoker', 'HeavyAlcohol', 'Age', 'Sex']
+X_model = data[predictors]
+y_model = data['HighBP']
+scaler = StandardScaler()
+X_model[['Age']] = scaler.fit_transform(X_model[['Age']])
+X_model = sm.add_constant(X_model)
