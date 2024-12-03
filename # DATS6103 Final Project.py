@@ -286,3 +286,13 @@ plt.xticks(ticks=[0, 1], labels=["Non-Smoker", "Smoker"])
 plt.show()
 
 # 2. Bar Plot for Heavy Alcohol Consumption and High Blood Pressure
+data['HeavyAlcohol'] = (data['HvyAlcoholConsump'] > 0).astype(int)  # Categorize heavy alcohol consumption
+plt.figure(figsize=(10, 6))
+sns.barplot(
+    x='HeavyAlcohol',
+    y='HighBP',
+    data=data,
+    estimator=lambda x: sum(x) / len(x),  # Proportion of HighBP
+    ci=None,
+    palette='coolwarm'
+    )
