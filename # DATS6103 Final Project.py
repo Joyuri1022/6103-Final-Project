@@ -1,4 +1,3 @@
-
 # DATS6103 Final Project 
 # pip install ucimlrepo
 #%%
@@ -6,7 +5,7 @@ import pandas as pd
 import csv
 import string
 import numpy as np
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, confusion_matrix, roc_curve, auc, accuracy_score
@@ -186,21 +185,34 @@ print('Accuracy:', accuracy)
 
 # %%
 # Random Forest model
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
 # Create and train model
-rf = RandomForestRegressor(n_estimators=100, random_state=39)
-rf.fit(X_train, y_train)
+# rf = RandomForestRegressor(n_estimators=100, random_state=39)
+# rf.fit(X_train, y_train)
+rf_model = RandomForestClassifier(
+        n_estimators=200,
+        max_depth=20,
+        min_samples_split=10,
+        min_samples_leaf=4,
+        random_state=39,
+        class_weight='balanced_subsample'
+    )
+rf_model.fit(X_train, y_train)
 
 # Get predictions
-y_pred = rf.predict(X_test)
-
+y_pred = rf_model.predict(X_test)
+# Print model performance metrics
+# y_pred = rf.predict(X_test_scaled).astype(int)
+print("\nModel Performance:")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
 # Calculate ROC curve and AUC
 fpr, tpr, thresholds = roc_curve(y_test, y_pred)
 roc_auc = auc(fpr, tpr)
 
 # Plot ROC curve
 rf_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of Random Forest Model')
+
 
 # %%
 from sklearn.neighbors import KNeighborsClassifier
@@ -212,6 +224,13 @@ knn.fit(X_train_scaled, y_train)
 
 # Get predictions and probabilities
 y_pred_proba = knn.predict_proba(X_test_scaled)[:, 1]
+y_pred = np.round(y_pred_proba)
+
+# Print model performance metrics
+# y_pred = rf.predict(X_test_scaled).astype(int)
+print("\nModel Performance:")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
 
 # Calculate ROC curve and AUC
 fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
@@ -244,6 +263,14 @@ xgb_model.fit(
 # Get predictions and probabilities
 y_pred_proba = xgb_model.predict_proba(X_test_scaled)[:, 1]
 
+y_pred = np.round(y_pred_proba)
+
+# Print model performance metrics
+# y_pred = rf.predict(X_test_scaled).astype(int)
+print("\nModel Performance:")
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
 # Calculate ROC curve and AUC
 fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)
 roc_auc = auc(fpr, tpr)
@@ -257,7 +284,7 @@ xgboost_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of XGBoost Model')
 
 
 
-# 2nd Smart Question
+# 2nd Smart Question - siddharth
 # Which habit causes more risk in high blood pressure? Consuming alcohol or smoking?
 # Import necessary libraries
 import pandas as pd
@@ -314,27 +341,6 @@ X_model = sm.add_constant(X_model)
 logit_model = sm.Logit(y_model, X_model).fit()
 
 print(logit_model.summary())
-coefficients = logit_model.params
-odds_ratios = np.exp(coefficients)
-
-print("\nOdds Ratios:")
-for variable in ["Smoker", "HeavyAlcohol"]:
-    if variable in odds_ratios.index: #Check if the variables are present
-        print(f"{variable}: {odds_ratios[variable]:.3f}")
-    else:
-        print(f"{variable} is not found in the model.")
-
-print("\nInterpretation of Odds Ratios:")
-selected_variables = ["Smoker", "HeavyAlcohol"]
-for variable, odds_ratio in odds_ratios.items():
-    if variable in selected_variables:
-        if odds_ratio > 1:
-            print(f"{variable}: Increases the odds of HighBP by {round((odds_ratio - 1) * 100, 2)}%.")
-        elif odds_ratio < 1:
-            print(f"{variable}: Decreases the odds of HighBP by {round((1 - odds_ratio) * 100, 2)}%.")
-        else:
-            print(f"{variable}: Has no effect on the odds of HighBP.")
-
 ## Interpretation
 
 ## 1. Check the p-values: Variables with p-values < 0.05 are statistically significant.
