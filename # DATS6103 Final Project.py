@@ -324,6 +324,10 @@ for variable in ["Smoker", "HeavyAlcohol"]:
     else:
         print(f"{variable} is not found in the model.")
 
+print("\nInterpretation of Odds Ratios:")
+selected_variables = ["Smoker", "HeavyAlcohol"]
+
+
 ## Interpretation
 
 ## 1. Check the p-values: Variables with p-values < 0.05 are statistically significant.
