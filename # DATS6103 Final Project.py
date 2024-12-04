@@ -319,14 +319,21 @@ odds_ratios = np.exp(coefficients)
 
 print("\nOdds Ratios:")
 for variable in ["Smoker", "HeavyAlcohol"]:
-    if variable in odds_ratios.index:  # Ensure the variable exists
+    if variable in odds_ratios.index: #Check if the variables are present
         print(f"{variable}: {odds_ratios[variable]:.3f}")
     else:
         print(f"{variable} is not found in the model.")
 
 print("\nInterpretation of Odds Ratios:")
 selected_variables = ["Smoker", "HeavyAlcohol"]
-
+for variable, odds_ratio in odds_ratios.items():
+    if variable in selected_variables:
+        if odds_ratio > 1:
+            print(f"{variable}: Increases the odds of HighBP by {round((odds_ratio - 1) * 100, 2)}%.")
+        elif odds_ratio < 1:
+            print(f"{variable}: Decreases the odds of HighBP by {round((1 - odds_ratio) * 100, 2)}%.")
+        else:
+            print(f"{variable}: Has no effect on the odds of HighBP.")
 
 ## Interpretation
 
