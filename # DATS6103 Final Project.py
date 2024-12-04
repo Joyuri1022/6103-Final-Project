@@ -257,7 +257,7 @@ xgboost_plot = rocplot(fpr, tpr,roc_auc, 'ROC Curve of XGBoost Model')
 
 
 
-# 2nd Smart Question - siddharth
+# 2nd Smart Question
 # Which habit causes more risk in high blood pressure? Consuming alcohol or smoking?
 # Import necessary libraries
 import pandas as pd
@@ -314,6 +314,8 @@ X_model = sm.add_constant(X_model)
 logit_model = sm.Logit(y_model, X_model).fit()
 
 print(logit_model.summary())
+coefficients = logit_model.params
+odds_ratios = np.exp(coefficients)
 ## Interpretation
 
 ## 1. Check the p-values: Variables with p-values < 0.05 are statistically significant.
