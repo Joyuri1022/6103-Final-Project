@@ -316,6 +316,14 @@ logit_model = sm.Logit(y_model, X_model).fit()
 print(logit_model.summary())
 coefficients = logit_model.params
 odds_ratios = np.exp(coefficients)
+
+print("\nOdds Ratios:")
+for variable in ["Smoker", "HeavyAlcohol"]:
+    if variable in odds_ratios.index:  # Ensure the variable exists
+        print(f"{variable}: {odds_ratios[variable]:.3f}")
+    else:
+        print(f"{variable} is not found in the model.")
+
 ## Interpretation
 
 ## 1. Check the p-values: Variables with p-values < 0.05 are statistically significant.
